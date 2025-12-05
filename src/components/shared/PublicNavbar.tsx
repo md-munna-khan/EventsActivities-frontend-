@@ -11,10 +11,10 @@ import { Logo } from "./logo";
 const PublicNavbar = async () => {
  const navItems = [
 
-  { href: "/dashboard/all-events", label: "All Events" },
+  { href: "/dashboard/all-events", label: "Explore Events" },
   { href: "/dashboard/my-events", label: "My Events" },
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/profile", label: "About" },
+  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
