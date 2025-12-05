@@ -9,23 +9,24 @@ import { Logo } from "./logo";
 
 
 const PublicNavbar = async () => {
-  const navItems = [
-    { href: "#", label: "Consultation" },
-    { href: "#", label: "Health Plans" },
-    { href: "#", label: "Medicine" },
-    { href: "#", label: "Diagnostics" },
-    { href: "#", label: "NGOs" },
-  ];
+ const navItems = [
+
+  { href: "/dashboard/all-events", label: "All Events" },
+  { href: "/dashboard/my-events", label: "My Events" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/profile", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+
 
   const accessToken = await getCookie("accessToken");
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur  dark:bg-background/95">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="flex items-center space-x-2">
+         <Link href="/" className="flex items-center space-x-2">
           <Logo/>
-        </Link>
-
+      </Link>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
           {navItems.map((link) => (
             <Link

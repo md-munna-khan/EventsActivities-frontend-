@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 type LogoProps = {
     width?: number;
@@ -9,6 +10,7 @@ type LogoProps = {
 
 export const Logo = ({ width = 150, height = 50 }: LogoProps) => {
     return (
+      
         <Image
             src="/evenzo .png"
             alt="Events Management Logo"
@@ -16,5 +18,9 @@ export const Logo = ({ width = 150, height = 50 }: LogoProps) => {
             height={height}
             priority
         />
+          
     );
 };
+      
+       
+      

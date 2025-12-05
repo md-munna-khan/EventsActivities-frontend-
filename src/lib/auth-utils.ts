@@ -13,10 +13,10 @@ export const commonProtectedRoutes: RouteConfig = {
     patterns: [], // [/password/change-password, /password/reset-password => /password/*]
 }
 
-// export const doctorProtectedRoutes: RouteConfig = {
-//     patterns: [/^\/doctor/], // Routes starting with /doctor/* , /assitants, /appointments/*
-//     exact: [], // "/assistants"
-// }
+export const hostProtectedRoutes: RouteConfig = {
+    patterns: [/^\/host/], // Routes starting with /host/*
+    exact: [], // "/assistants"
+}
 
 export const adminProtectedRoutes: RouteConfig = {
     patterns: [/^\/admin/], // Routes starting with /admin/*
@@ -40,9 +40,12 @@ export const isRouteMatches = (pathname: string, routes: RouteConfig): boolean =
     // if pathname === /dashboard/my-appointments => matches /^\/dashboard/ => true
 }
 
-export const getRouteOwner = (pathname: string): "ADMIN" | "CLIENT" | "COMMON" | null => {
+export const getRouteOwner = (pathname: string): "ADMIN" | "HOST" | "CLIENT" | "COMMON" | null => {
     if (isRouteMatches(pathname, adminProtectedRoutes)) {
         return "ADMIN";
+    }
+    if (isRouteMatches(pathname, hostProtectedRoutes)) {
+        return "HOST";
     }
     if (isRouteMatches(pathname, clientProtectedRoutes)) {
         return "CLIENT";
@@ -57,8 +60,11 @@ export const getDefaultDashboardRoute = (role: UserRole): string => {
     if (role === "ADMIN") {
         return "/admin/dashboard";
     }
+    if (role === "HOST") {
+        return "/host/dashboard";
+    }
     if (role === "CLIENT") {
-        return "/dashboard";
+        return "/clients/dashboard";
     }
     return "/";
 }

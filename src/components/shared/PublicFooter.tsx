@@ -6,7 +6,7 @@ function PublicFooter() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-bold mb-2">PH Doc</h3>
+            <h3 className="font-bold mb-2">Evenzo Doc</h3>
             <p className="text-sm text-muted-foreground">Your health is our priority. We are here to provide the best medical services.</p>
           </div>
           <div>
@@ -37,7 +37,7 @@ function PublicFooter() {
           </div>
         </div>
         <div className="mt-8 border-t pt-4 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} PH Doc. All Rights Reserved.
+          &copy; {new Date().getFullYear()}Evenzo Doc. All Rights Reserved.
         </div>
       </div>
     </footer>
