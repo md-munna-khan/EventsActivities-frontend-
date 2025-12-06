@@ -58,12 +58,16 @@ interface Event {
 
 interface EventDetailsClientProps {
     event: Event;
+    currentUserId?: string | null;
 }
 
-const EventDetailsClient = ({ event }: EventDetailsClientProps) => {
+const EventDetailsClient = ({ event, currentUserId }: EventDetailsClientProps) => {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    
+    // Check if current user is the host
+    const isHost = currentUserId && event.hostId && String(currentUserId) === String(event.hostId);
 
     const getStatusColor = (status: string) => {
         const statusColors: Record<string, string> = {
@@ -88,7 +92,7 @@ const EventDetailsClient = ({ event }: EventDetailsClientProps) => {
 
                 if (result.success) {
                     toast.success('Event deleted successfully');
-                    router.push('/host/dashboard/all-events');
+                    router.push('/explore-events');
                 } else {
                     toast.error(result.message || 'Failed to delete event');
                 }
@@ -110,24 +114,26 @@ const EventDetailsClient = ({ event }: EventDetailsClientProps) => {
                     <ArrowLeft className="h-4 w-4" />
                     Back to Events
                 </Button>
-                <div className="flex gap-2">
-                    <Button
-                        variant="outline"
-                        onClick={() => setIsEditModalOpen(true)}
-                        disabled={isPending}
-                    >
-                        <Edit className="mr-2 h-4 w-4" />
-                        Edit
-                    </Button>
-                    <Button
-                        variant="destructive"
-                        onClick={handleDelete}
-                        disabled={isPending}
-                    >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
-                    </Button>
-                </div>
+                {isHost && (
+                    <div className="flex gap-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsEditModalOpen(true)}
+                            disabled={isPending}
+                        >
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={handleDelete}
+                            disabled={isPending}
+                        >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                        </Button>
+                    </div>
+                )}
             </div>
 
             {/* Event Image */}
@@ -353,12 +359,14 @@ const EventDetailsClient = ({ event }: EventDetailsClientProps) => {
                 </div>
             </div>
 
-            {/* Edit Modal */}
-            <EditEventModal
-                open={isEditModalOpen}
-                onOpenChange={setIsEditModalOpen}
-                event={event}
-            />
+            {/* Edit Modal - Only show for host */}
+            {isHost && (
+                <EditEventModal
+                    open={isEditModalOpen}
+                    onOpenChange={setIsEditModalOpen}
+                    event={event}
+                />
+            )}
         </div>
     );
 };

@@ -1,14 +1,13 @@
 import React, { Suspense } from 'react';
 import { getEvents, IEventFilters } from '@/services/host/hostService';
-
 import { TableSkeleton } from '@/components/shared/TableSkeleton';
-import AllEventsClient from '@/components/modules/Host/AllEventsClient';
+import ExploreEventsClient from '@/components/modules/Host/ExploreEventsClient';
 
-interface AllEventsPageProps {
+interface ExploreEventsPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const AllEventsPage = async ({ searchParams }: AllEventsPageProps) => {
+const ExploreEventsPage = async ({ searchParams }: ExploreEventsPageProps) => {
     const params = await searchParams;
     
     // Extract filters from search params
@@ -26,27 +25,27 @@ const AllEventsPage = async ({ searchParams }: AllEventsPageProps) => {
     const result = await getEvents(filters);
  
     // Debug logging
-    console.log("AllEventsPage - Filters:", filters);
-    console.log("AllEventsPage - Result:", JSON.stringify(result, null, 2));
+    console.log("ExploreEventsPage - Filters:", filters);
+    console.log("ExploreEventsPage - Result:", JSON.stringify(result, null, 2));
 
     const events = result.success && result.data ? result.data : [];
     const meta = result.meta || { page: 1, limit: 10, total: 0, pages: 0 };
 
     // Debug logging
-    console.log("AllEventsPage - Events count:", events.length);
-    console.log("AllEventsPage - Meta:", meta);
+    console.log("ExploreEventsPage - Events count:", events.length);
+    console.log("ExploreEventsPage - Meta:", meta);
 
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight">All Events</h1>
+                <h1 className="text-3xl font-bold tracking-tight">Explore Events</h1>
                 <p className="text-muted-foreground">
-                    View and manage all events in the system
+                    Discover and explore all available events
                 </p>
             </div>
 
             <Suspense fallback={<TableSkeleton columns={7} rows={10} />}>
-                <AllEventsClient 
+                <ExploreEventsClient 
                     initialEvents={events} 
                     initialMeta={meta}
                 />
@@ -55,4 +54,4 @@ const AllEventsPage = async ({ searchParams }: AllEventsPageProps) => {
     );
 };
 
-export default AllEventsPage;
+export default ExploreEventsPage;

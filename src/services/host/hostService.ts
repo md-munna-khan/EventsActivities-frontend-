@@ -364,3 +364,125 @@ export async function deleteEvent(eventId: string) {
         };
     }
 }
+
+export async function getMyEvents(filters?: IEventFilters) {
+    try {
+        // Build query string from filters
+        const queryParams = new URLSearchParams();
+        
+        // Convert category to uppercase to match Prisma enum
+        if (filters?.category && filters.category !== 'All') {
+            queryParams.append("category", filters.category.toUpperCase());
+        }
+        
+        // Convert status to uppercase to match Prisma enum
+        if (filters?.status && filters.status !== 'All') {
+            queryParams.append("status", filters.status.toUpperCase());
+        }
+        
+        if (filters?.search) queryParams.append("search", filters.search);
+        if (filters?.fromDate) queryParams.append("fromDate", filters.fromDate);
+        if (filters?.toDate) queryParams.append("toDate", filters.toDate);
+        if (filters?.page) queryParams.append("page", filters.page.toString());
+        if (filters?.limit) queryParams.append("limit", filters.limit.toString());
+
+        const queryString = queryParams.toString();
+        const endpoint = `/hosts/my-events${queryString ? `?${queryString}` : ""}`;
+        
+        const response = await serverFetch.get(endpoint);
+        
+        // Check if response is OK
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("getMyEvents - Response not OK:", response.status, errorText);
+            return {
+                success: false,
+                data: [],
+                meta: null,
+                message: `Failed to fetch events: ${response.status}`,
+            };
+        }
+        
+        const result = await response.json();
+
+        // Handle response structure
+        if (result.success !== undefined) {
+            if (result.success && Array.isArray(result.data)) {
+                return {
+                    success: true,
+                    data: result.data,
+                    meta: result.meta || {
+                        page: filters?.page || 1,
+                        limit: filters?.limit || 10,
+                        total: result.data.length,
+                        pages: Math.ceil((result.data.length || 0) / (filters?.limit || 10)),
+                    },
+                };
+            }
+            if (result.success && !result.data) {
+                return {
+                    success: true,
+                    data: [],
+                    meta: result.meta || {
+                        page: filters?.page || 1,
+                        limit: filters?.limit || 10,
+                        total: 0,
+                        pages: 0,
+                    },
+                };
+            }
+            return result;
+        }
+
+        // Handle array response
+        if (Array.isArray(result.data)) {
+            return {
+                success: true,
+                data: result.data,
+                meta: result.meta || {
+                    page: filters?.page || 1,
+                    limit: filters?.limit || 10,
+                    total: result.data.length,
+                    pages: 1,
+                },
+            };
+        }
+
+        if (Array.isArray(result)) {
+            return {
+                success: true,
+                data: result,
+                meta: {
+                    page: filters?.page || 1,
+                    limit: filters?.limit || 10,
+                    total: result.length,
+                    pages: Math.ceil(result.length / (filters?.limit || 10)),
+                },
+            };
+        }
+
+        console.warn("getMyEvents - Unexpected response structure:", result);
+        return {
+            success: false,
+            data: [],
+            meta: {
+                page: filters?.page || 1,
+                limit: filters?.limit || 10,
+                total: 0,
+                pages: 0,
+            },
+            message: "Unexpected response structure from API",
+        };
+    } catch (error: any) {
+        console.error("Error fetching my events:", error);
+        return {
+            success: false,
+            data: [],
+            meta: null,
+            message:
+                process.env.NODE_ENV === "development"
+                    ? error.message
+                    : "Failed to fetch events",
+        };
+    }
+}
