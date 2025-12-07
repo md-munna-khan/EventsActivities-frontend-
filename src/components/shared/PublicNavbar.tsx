@@ -108,34 +108,28 @@ type NavItem = { href: string; label: string };
 
 const NAV_BY_ROLE: Record<string, NavItem[]> = {
   PUBLIC: [
-   
     { href: "/explore-events", label: "Explore Events" },
-    { href: "/become-host", label: "Become a Host" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ],
   CLIENT: [
-    
     { href: "/explore-events", label: "Explore Events" },
-    { href: "/events/my-events", label: "My Events" },
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/profile", label: "Profile" },
+    { href: "/dashboard/join-events", label: "My Events" },
+    { href: "/dashboard/apply-host", label: "Become a Host" },
+    { href: "/my-profile", label: "Profile" },
   ],
   HOST: [
-   
-       { href: "/explore-events", label: "Explore Events" },
-    { href: "/events/my-hosted", label: "My Events " },
-    { href: "/events/create", label: "Create Event" },
-    { href: "/dashboard", label: "Dashboard" },
+    { href: "/explore-events", label: "Explore Events" },
+    { href: "/host/dashboard/my-events", label: "My Events (Hosted)" },
+    { href: "/host/dashboard", label: "Create Event" },
     { href: "/my-profile", label: "Profile" },
   ],
   ADMIN: [
-
-    { href: "/admin", label: "Admin Dashboard" },
-    { href: "/admin/users", label: "Manage Users" },
-    { href: "/admin/hosts", label: "Manage Hosts" },
-    { href: "/admin/events", label: "Manage Events" },
-    { href: "/profile", label: "Profile" },
+    { href: "/admin/dashboard", label: "Admin Dashboard" },
+    { href: "/admin/dashboard/clients-management", label: "Manage Users" },
+    { href: "/admin/dashboard/hosts-management", label: "Manage Hosts" },
+    { href: "/admin/dashboard", label: "Manage Events" },
+    { href: "/my-profile", label: "Profile" },
   ],
 };
 
@@ -189,9 +183,14 @@ const PublicNavbar = () => {
           {role !== "PUBLIC" ? (
             <LogoutButton />
           ) : (
-            <Link href="/login">
-              <Button>Login</Button>
-            </Link>
+            <>
+              <Link href="/login">
+                <Button variant="ghost">Login</Button>
+              </Link>
+              <Link href="/register">
+                <Button>Register</Button>
+              </Link>
+            </>
           )}
         </div>
 
@@ -218,9 +217,14 @@ const PublicNavbar = () => {
                       <LogoutButton />
                     </div>
                   ) : (
-                    <Link href="/login" className="text-lg font-medium">
-                      <Button>Login</Button>
-                    </Link>
+                    <>
+                      <Link href="/login" className="text-lg font-medium">
+                        <Button variant="ghost" className="w-full">Login</Button>
+                      </Link>
+                      <Link href="/register" className="text-lg font-medium">
+                        <Button className="w-full">Register</Button>
+                      </Link>
+                    </>
                   )}
                 </div>
               </nav>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,6 +20,8 @@ import { formatDateTime } from '@/lib/formatters';
 import Image from 'next/image';
 import EditEventModal from '@/components/modules/Host/EditEventModal';
 import { deleteEvent } from '@/services/host/hostService';
+import { joinEvent, leaveEvent, checkEventParticipation } from '@/services/events/eventService';
+import { getUserInfo } from '@/services/auth/getUserInfo';
 
 interface Event {
     id: string;
@@ -65,9 +67,42 @@ const EventDetailsClient = ({ event, currentUserId }: EventDetailsClientProps) =
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isJoined, setIsJoined] = useState(false);
+    const [isChecking, setIsChecking] = useState(true);
+    const [userRole, setUserRole] = useState<string | null>(null);
     
     // Check if current user is the host
     const isHost = currentUserId && event.hostId && String(currentUserId) === String(event.hostId);
+    
+    // Check participation status and user role
+    useEffect(() => {
+        const checkStatus = async () => {
+            try {
+                const userInfo = await getUserInfo();
+                setUserRole(userInfo?.role || null);
+                
+                if (userInfo && !isHost) {
+                    const participation = await checkEventParticipation(event.id);
+                    if (participation.success && participation.data) {
+                        setIsJoined(participation.data.isJoined || false);
+                    } else {
+                        // Check if user is in participants list
+                        const userEmail = userInfo.email || userInfo.client?.email || userInfo.host?.email;
+                        const isInParticipants = event.participants?.some(
+                            (p: any) => p.client?.email === userEmail || p.clientId === userInfo.id || p.clientId === userInfo.client?.id
+                        );
+                        setIsJoined(isInParticipants || false);
+                    }
+                }
+            } catch (error) {
+                console.error("Error checking participation:", error);
+            } finally {
+                setIsChecking(false);
+            }
+        };
+        
+        checkStatus();
+    }, [event.id, event.participants, isHost]);
 
     const getStatusColor = (status: string) => {
         const statusColors: Record<string, string> = {
@@ -98,6 +133,49 @@ const EventDetailsClient = ({ event, currentUserId }: EventDetailsClientProps) =
                 }
             } catch (error) {
                 toast.error('An error occurred while deleting the event');
+            }
+        });
+    };
+
+    const handleJoin = async () => {
+        startTransition(async () => {
+            try {
+                const result = await joinEvent(event.id);
+                if (result.success) {
+                    if (result.data?.paymentUrl) {
+                        // Redirect to payment page
+                        window.location.href = result.data.paymentUrl;
+                    } else {
+                        toast.success('Joined event successfully!');
+                        setIsJoined(true);
+                        router.refresh();
+                    }
+                } else {
+                    toast.error(result.message || 'Failed to join event');
+                }
+            } catch (error: any) {
+                toast.error(error.message || 'An error occurred while joining the event');
+            }
+        });
+    };
+
+    const handleLeave = async () => {
+        if (!confirm('Are you sure you want to leave this event?')) {
+            return;
+        }
+
+        startTransition(async () => {
+            try {
+                const result = await leaveEvent(event.id);
+                if (result.success) {
+                    toast.success('Left event successfully');
+                    setIsJoined(false);
+                    router.refresh();
+                } else {
+                    toast.error(result.message || 'Failed to leave event');
+                }
+            } catch (error: any) {
+                toast.error(error.message || 'An error occurred while leaving the event');
             }
         });
     };
@@ -356,6 +434,42 @@ const EventDetailsClient = ({ event, currentUserId }: EventDetailsClientProps) =
                             )}
                         </CardContent>
                     </Card>
+
+                    {/* Join/Leave Button - Only show for non-hosts */}
+                    {!isHost && userRole === 'CLIENT' && !isChecking && (
+                        <Card>
+                            <CardContent className="pt-6">
+                                {isJoined ? (
+                                    <Button
+                                        variant="destructive"
+                                        className="w-full"
+                                        onClick={handleLeave}
+                                        disabled={isPending}
+                                    >
+                                        Leave Event
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        className="w-full"
+                                        onClick={handleJoin}
+                                        disabled={isPending || event.status !== 'OPEN' || (event.participantCount || 0) >= event.capacity}
+                                    >
+                                        {isPending ? 'Processing...' : `Join Event - ${formatCurrency(event.joiningFee)}`}
+                                    </Button>
+                                )}
+                                {event.status !== 'OPEN' && (
+                                    <p className="text-sm text-muted-foreground mt-2 text-center">
+                                        This event is not open for joining
+                                    </p>
+                                )}
+                                {(event.participantCount || 0) >= event.capacity && event.status === 'OPEN' && (
+                                    <p className="text-sm text-muted-foreground mt-2 text-center">
+                                        This event is full
+                                    </p>
+                                )}
+                            </CardContent>
+                        </Card>
+                    )}
                 </div>
             </div>
 

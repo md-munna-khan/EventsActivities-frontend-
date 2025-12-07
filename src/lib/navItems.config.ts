@@ -60,13 +60,13 @@ export const clientNavItems: NavSection[] = [
     items: [
       {
         title: "Join Events",
-        href: "/clients/dashboard/join-events",
+        href: "/dashboard/join-events",
         icon: "Calendar",
         roles: ["CLIENT"],
       },
       {
         title: "My Bookings",
-        href: "/clients/dashboard/my-bookings",
+        href: "/dashboard/my-bookings",
         icon: "Calendar",
         roles: ["CLIENT"],
       },
