@@ -1,5 +1,6 @@
-import ApplyHostClient from '@/components/modules/client/ApplyHostClient';
-import React from 'react';
+
+import { ApplyHostClient } from '@/components/modules/client/ApplyHostClient';
+
 
 const ApplyHostPage = () => {
   return (

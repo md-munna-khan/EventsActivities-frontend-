@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Suspense } from 'react';
 import { getMyEvents, IEventFilters } from '@/services/host/hostService';
 import { TableSkeleton } from '@/components/shared/TableSkeleton';

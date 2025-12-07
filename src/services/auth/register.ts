@@ -1,11 +1,12 @@
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
-
-import { loginUser } from "./loginUser";
 import { createClientValidation } from "@/zod/auth.validation";
+import { loginUser } from "./loginUser";
 
 export const registerClient = async (_currentState: any, formData: FormData): Promise<any> => {
   try {
@@ -22,7 +23,7 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
       : (formData.get("interests") ? [formData.get("interests")] : []);
     const interestsArray = Array.isArray(rawInterests) ? rawInterests.map((i: any) => String(i)) : [];
 
-    // Build payload according to your Zod schema
+    // Build payload according to your Zod schema (keep field names same as your form)
     const payload = {
       password: getString("password"),
       client: {
@@ -32,77 +33,101 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
         contactNumber: getString("contactNumber"),
         location: getString("location"),
         interests: interestsArray,
-        // profilePhoto omitted on purpose — backend may set after upload
+        // profilePhoto/file handled separately below
       },
     };
 
-    // Debug: quick log of payload before validation
-    console.log("[registerClient] payload before validation:", payload);
-
-    // Validate payload with Zod
-    const validationResult = zodValidator(payload, createClientValidation);
-    if (validationResult.success === false) {
-      // log details to help debugging (zodValidator's structure may vary)
-      console.warn("[registerClient] validation failed:", validationResult);
-      return validationResult;
+    // Validate with Zod
+    const validation = zodValidator(payload, createClientValidation);
+    if (validation.success === false) {
+      return validation;
     }
-    const validatedPayload: any = validationResult.data;
+    const validatedPayload: any = validation.data;
 
     // Detect incoming file (either key 'file' or 'profilePhoto' from the original form)
-    const incomingFile = (typeof formData.get === "function") ? (formData.get("file") ?? formData.get("profilePhoto")) : null;
+    const incomingFile = typeof formData.get === "function" ? (formData.get("file") ?? formData.get("profilePhoto")) : null;
     const hasFile = incomingFile && incomingFile instanceof File && incomingFile.size > 0;
 
-    // Debug: show whether file was detected
-    console.log("[registerClient] hasFile:", hasFile);
-
+    // Prepare request body
     let res: Response;
     if (hasFile) {
-      // Build multipart FormData: include JSON data as a field + file
       const newFormData = new FormData();
-      newFormData.append("data", JSON.stringify(validatedPayload));
+      newFormData.append("data", JSON.stringify({
+        password: validatedPayload.password,
+        client: validatedPayload.client,
+      }));
       newFormData.append("file", incomingFile as File);
 
-      // Debug: list FormData entries (can't show file binary, but will show key)
-      for (const entry of newFormData.entries()) {
-        console.log("[registerClient] newFormData entry:", entry[0], entry[1]);
-      }
-
-      // Do NOT set Content-Type manually — let serverFetch/browser set boundary
       res = await serverFetch.post("/user/create-client", {
         body: newFormData,
       });
     } else {
-      // No file: send JSON (ensure Content-Type header present)
       res = await serverFetch.post("/user/create-client", {
-        body: JSON.stringify(validatedPayload),
+        body: JSON.stringify({
+          password: validatedPayload.password,
+          client: validatedPayload.client,
+        }),
         headers: { "Content-Type": "application/json" },
       });
     }
 
-    // Debug: response status
-    console.log("[registerClient] fetch response status:", res.status);
-
     const result = await res.json();
 
-    // Debug: full result
-    console.log("[registerClient] server result:", result);
-
     if (result.success) {
-      // Auto-login: create small FormData with only email & password
-      // NOTE: if your loginUser expects a plain object, change this to loginUser(_currentState, { email, password })
+      // Try to normalize token and user from common possible shapes
+      const token = result?.data?.token ?? result?.token ?? result?.accessToken ?? result?.data?.accessToken ?? null;
+      const userFromApi = result?.data?.user ?? result?.data?.client ?? null;
+
+      if (token) {
+        // Return consistent shape so client can persist auth (localStorage / context)
+        return {
+          success: true,
+          message: result.message ?? "Registration successful",
+          data: {
+            user: userFromApi ?? validatedPayload.client,
+            token,
+            raw: result,
+          },
+        };
+      }
+
+      // Fallback: try auto-login (keeps original behavior when backend doesn't return token)
       try {
-        const loginForm = new FormData();
-        loginForm.append("email", validatedPayload.client.email);
-        loginForm.append("password", validatedPayload.password);
-        await loginUser(_currentState, loginForm);
-      } catch (loginErr) {
+        // reuse original formData for loginUser as your loginUser likely expects same fields
+        await loginUser(_currentState, formData);
+        return {
+          success: true,
+          message: result.message ?? "Registration successful (auto-login attempted)",
+          data: {
+            user: userFromApi ?? validatedPayload.client,
+            raw: result,
+          },
+        };
+      } catch (loginErr: any) {
+        // If loginUser performed redirect(), re-throw NEXT_REDIRECT so Next.js handles it
+        if (loginErr?.digest?.startsWith?.("NEXT_REDIRECT")) {
+          throw loginErr;
+        }
+        // Non-blocking: log and still return success so client can set local state
         console.warn("[registerClient] Auto-login failed (non-blocking):", loginErr);
+        return {
+          success: true,
+          message: result.message ?? "Registration successful (auto-login failed)",
+          data: {
+            user: userFromApi ?? validatedPayload.client,
+            raw: result,
+          },
+        };
       }
     }
 
+    // Not successful — forward the backend response (validation errors, duplicates, etc.)
     return result;
   } catch (error: any) {
-    if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;
+    // Re-throw NEXT_REDIRECT so Next.js handles server-side redirect signals
+    if (error?.digest?.startsWith?.("NEXT_REDIRECT")) {
+      throw error;
+    }
     console.error("[registerClient] error:", error);
     return {
       success: false,

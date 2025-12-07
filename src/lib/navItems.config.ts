@@ -84,17 +84,7 @@ export const clientNavItems: NavSection[] = [
       // },
     ],
   },
-  {
-    title: "Account",
-    items: [
-      {
-        title: "Apply to be Host",
-        href: "/clients/dashboard/apply-host",
-        icon: "UserCheck",
-        roles: ["CLIENT"],
-      },
-    ],
-  },
+
 ];
 
 export const adminNavItems: NavSection[] = [
