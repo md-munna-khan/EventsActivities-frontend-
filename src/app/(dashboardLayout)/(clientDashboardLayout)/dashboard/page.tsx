@@ -3,7 +3,7 @@ import React from 'react';
 const ClientDashboardPage = () => {
     return (
         <div>
-            ClientDashboardPage
+            ClientDashboardPage kire
         </div>
     );
 };

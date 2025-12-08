@@ -58,12 +58,7 @@ export const clientNavItems: NavSection[] = [
   {
     title: "My Activities",
     items: [
-      {
-        title: "Join Events",
-        href: "/dashboard/join-events",
-        icon: "Calendar",
-        roles: ["CLIENT"],
-      },
+  
       {
         title: "My Bookings",
         href: "/dashboard/my-bookings",

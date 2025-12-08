@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { getUserProfile, getUserEvents } from '@/services/user/profileService';

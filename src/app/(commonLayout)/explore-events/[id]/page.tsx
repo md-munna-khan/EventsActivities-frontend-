@@ -1,7 +1,7 @@
 import React from 'react';
 import { getSingleEvent } from '@/services/host/hostService';
 import { notFound } from 'next/navigation';
-import EventDetailsClient from '@/components/modules/Host/EventDetailsClient';
+import EventDetailsClient from '@/components/modules/event/EventDetailsClient';
 import { getUserInfo } from '@/services/auth/getUserInfo';
 
 

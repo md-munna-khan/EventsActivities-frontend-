@@ -62,12 +62,7 @@ export async function deleteAdmin(id: string) {
 // Host application management
 export async function getPendingHostApplications() {
   try {
-    // try the expected endpoint first
-    let res = await serverFetch.get('/admin/host-applications');
-    if (!res.ok) {
-      // fallback to other possible endpoint used in backend
-      res = await serverFetch.get('/admin/events/pending');
-    }
+    const res = await serverFetch.get('/admin/pending-host-applications');
     const result = await res.json();
     return result;
   } catch (error: any) {
@@ -101,7 +96,7 @@ export async function rejectHostApplication(applicationId: string) {
 // Event approval flows
 export async function getPendingEvents() {
   try {
-    const res = await serverFetch.get('/admin/events/pending');
+    const res = await serverFetch.get('/admin/events/pending-event-applications');
     const result = await res.json();
     return result;
   } catch (error: any) {
@@ -129,6 +124,106 @@ export async function rejectEvent(eventId: string) {
   } catch (error: any) {
     console.error('rejectEvent error', error?.message || error);
     return { success: false, message: error?.message || 'Failed to reject event' };
+  }
+}
+
+// Users, Hosts, Events management
+export async function getAllUsers(filters: IAdminFilters = {}, options: IPaginationOptions = {}) {
+  try {
+    const qs = new URLSearchParams();
+    Object.entries(filters).forEach(([k, v]) => { if (v !== undefined && v !== null) qs.set(k, String(v)); });
+    Object.entries(options).forEach(([k, v]) => { if (v !== undefined && v !== null) qs.set(k, String(v)); });
+    const res = await serverFetch.get(`/admin/users?${qs.toString()}`);
+    return await res.json();
+  } catch (error: any) {
+    console.error('getAllUsers error', error?.message || error);
+    return { success: false, message: error?.message || 'Failed to fetch users' };
+  }
+}
+
+export async function updateUserStatus(userId: string, status: string) {
+  try {
+    const res = await serverFetch.patch(`/admin/users/${userId}/status`, { body: JSON.stringify({ status }), headers: { 'Content-Type': 'application/json' } });
+    return await res.json();
+  } catch (error: any) {
+    console.error('updateUserStatus error', error?.message || error);
+    return { success: false, message: error?.message || 'Failed to update user status' };
+  }
+}
+
+export async function deleteUser(userId: string) {
+  try {
+    const res = await serverFetch.delete(`/admin/users/${userId}`);
+    return await res.json();
+  } catch (error: any) {
+    console.error('deleteUser error', error?.message || error);
+    return { success: false, message: error?.message || 'Failed to delete user' };
+  }
+}
+export async function getAllHosts(filters: IAdminFilters = {}, options: IPaginationOptions = {}) {
+  try {
+    const qs = new URLSearchParams();
+    Object.entries(filters).forEach(([k, v]) => { if (v !== undefined && v !== null) qs.set(k, String(v)); });
+    Object.entries(options).forEach(([k, v]) => { if (v !== undefined && v !== null) qs.set(k, String(v)); });
+    const res = await serverFetch.get(`/admin/hosts?${qs.toString()}`);
+    return await res.json();
+  } catch (error: any) {
+    console.error('getAllHosts error', error?.message || error);
+    return { success: false, message: error?.message || 'Failed to fetch hosts' };
+  }
+}
+
+export async function updateHostStatus(hostId: string, status: string) {
+  try {
+    const res = await serverFetch.patch(`/admin/hosts/${hostId}/status`, { body: JSON.stringify({ status }), headers: { 'Content-Type': 'application/json' } });
+    return await res.json();
+  } catch (error: any) {
+    console.error('updateHostStatus error', error?.message || error);
+    return { success: false, message: error?.message || 'Failed to update host status' };
+  }
+}
+
+export async function deleteHost(hostId: string) {
+  try {
+    const res = await serverFetch.delete(`/admin/hosts/${hostId}`);
+    return await res.json();
+  } catch (error: any) {
+    console.error('deleteHost error', error?.message || error);
+    return { success: false, message: error?.message || 'Failed to delete host' };
+  }
+
+}
+
+export async function getAllEvents(filters: IAdminFilters = {}, options: IPaginationOptions = {}) {
+  try {
+    const qs = new URLSearchParams();
+    Object.entries(filters).forEach(([k, v]) => { if (v !== undefined && v !== null) qs.set(k, String(v)); });
+    Object.entries(options).forEach(([k, v]) => { if (v !== undefined && v !== null) qs.set(k, String(v)); });
+    const res = await serverFetch.get(`/admin/events?${qs.toString()}`);
+    return await res.json();
+  } catch (error: any) {
+    console.error('getAllEvents error', error?.message || error);
+    return { success: false, message: error?.message || 'Failed to fetch events' };
+  }
+}
+
+export async function updateEventStatus(eventId: string, status: string) {
+  try {
+    const res = await serverFetch.patch(`/admin/events/${eventId}/status`, { body: JSON.stringify({ status }), headers: { 'Content-Type': 'application/json' } });
+    return await res.json();
+  } catch (error: any) {
+    console.error('updateEventStatus error', error?.message || error);
+    return { success: false, message: error?.message || 'Failed to update event status' };
+  }
+}
+
+export async function deleteEventById(eventId: string) {
+  try {
+    const res = await serverFetch.delete(`/admin/events/${eventId}`);
+    return await res.json();
+  } catch (error: any) {
+    console.error('deleteEvent error', error?.message || error);
+    return { success: false, message: error?.message || 'Failed to delete event' };
   }
 }
 

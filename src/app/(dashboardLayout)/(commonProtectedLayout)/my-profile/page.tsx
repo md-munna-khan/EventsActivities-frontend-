@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useActionState, useEffect, Suspense } from 'react';
@@ -12,7 +13,8 @@ import { getUserInfo } from '@/services/auth/getUserInfo';
 import InputFieldError from '@/components/shared/InputFieldError';
 import { getInitials } from '@/lib/formatters';
 import { Badge } from '@/components/ui/badge';
-import { redirect } from 'next/navigation';
+
+
 
 const INTERESTS = [
   "MUSIC","SPORTS","HIKING","TRAVEL","COOKING","READING","DANCING",
@@ -24,6 +26,7 @@ const INTERESTS = [
 
 const MyProfilePageContent = () => {
   const [userInfo, setUserInfo] = React.useState<any>(null);
+
   const [state, formAction, isPending] = useActionState(updateMyProfile, null);
 
   useEffect(() => {

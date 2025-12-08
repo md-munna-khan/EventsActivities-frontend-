@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { getEvents, IEventFilters } from '@/services/host/hostService';
 import { TableSkeleton } from '@/components/shared/TableSkeleton';
-import ExploreEventsClient from '@/components/modules/Host/ExploreEventsClient';
+import ExploreEventsClient from '@/components/modules/event/ExploreEventsClient';
 
 interface ExploreEventsPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

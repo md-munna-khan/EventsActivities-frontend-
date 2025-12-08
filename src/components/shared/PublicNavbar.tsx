@@ -35,8 +35,8 @@ const NAV_BY_ROLE: Record<string, NavItem[]> = {
     { href: "/my-profile", label: "Profile" },
   ],
   ADMIN: [
+     { href: "/explore-events", label: "Explore Events" },
     { href: "/admin/dashboard", label: "Admin Dashboard" },
-  
     { href: "/my-profile", label: "Profile" },
   ],
 };

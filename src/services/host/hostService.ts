@@ -92,7 +92,7 @@ export async function createEvent(data: IEventFormData, file?: File) {
         });
 
         const result = await response.json();
-        console.log(result);
+        // console.log(result);
         return result;
     } catch (error: any) {
         console.error("Error creating event:", error);

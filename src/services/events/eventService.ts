@@ -45,3 +45,16 @@ export async function checkEventParticipation(eventId: string) {
   }
 }
 
+export async function getUserBookings() {
+  try {
+    const response = await serverFetch.get('/events/my-bookings');
+    const result = await response.json();
+    return result;
+  } catch (error: any) {
+    console.error("Error fetching user bookings:", error);
+    return {
+      success: false,
+      message: error.message || "Failed to fetch user bookings",
+    };
+  }
+}
