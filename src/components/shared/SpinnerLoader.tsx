@@ -19,7 +19,7 @@ const SIZE_MAP = {
 } as const;
 
 export default function SpinnerLoader({
-  text = "Next Level healthcare...",
+  text = "Events Management ...",
   size = "md",
   className = "",
   animated = true,

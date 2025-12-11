@@ -79,8 +79,8 @@ const HostsManagement = async () => {
   if (!res || res.success === false) {
     return (
       <div>
-        <h2 className="text-2xl font-semibold">Clients Management</h2>
-        <div className="mt-4 text-red-600">Failed to load clients: {res?.message ?? "Unknown error"}</div>
+        <h2 className="text-2xl font-semibold">Hosts Management</h2>
+        <div className="mt-4 text-red-600">Failed to load hosts: {res?.message ?? "Unknown error"}</div>
       </div>
     );
   }
