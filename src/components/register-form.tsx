@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import InputFieldError from "./shared/InputFieldError";
 import { Button } from "./ui/button";
@@ -17,17 +17,38 @@ const INTERESTS = [
 ];
 
 const RegisterForm = () => {
-  const [state, formAction, isPending] = useActionState(registerClient, null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction, isPending] = useActionState(registerClient, {
+    success: false,
+    errors: [],
+    message: null,
+  });
 
   useEffect(() => {
     if (state) {
-      if (!state.success && state.message) toast.error(state.message);
-      if (state.success && state.message) toast.success(state.message);
+      // Show validation errors as toast
+      if (!state.success && state.errors && state.errors.length > 0) {
+        (state.errors as Array<{ field: string; message: string }>).forEach((err) => {
+          toast.error(`${err.field}: ${err.message}`);
+        });
+      }
+      // Show general error message
+      if (!state.success && state.message && (!state.errors || state.errors.length === 0)) {
+        toast.error(state.message);
+      }
+      // Show success message
+      if (state.success && state.message) {
+        toast.success(state.message);
+        // Clear form on success
+        if (formRef.current) {
+          formRef.current.reset();
+        }
+      }
     }
   }, [state]);
 
   return (
-    <form action={formAction} encType="multipart/form-data">
+    <form ref={formRef} action={formAction} encType="multipart/form-data">
       <FieldGroup>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Field>

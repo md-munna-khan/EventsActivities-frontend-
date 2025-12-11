@@ -142,6 +142,11 @@ const CreateEventModal = ({ open, onOpenChange }: CreateEventModalProps) => {
                 joiningFee: Number(formData.joiningFee),
                 capacity: Number(formData.capacity),
             };
+if (new Date(formData.date) <= new Date()) {
+  toast.error("Please select a future date");
+  setIsPending(false);
+  return;
+}
 
             const result = await createEvent(data, selectedFile || undefined);
 

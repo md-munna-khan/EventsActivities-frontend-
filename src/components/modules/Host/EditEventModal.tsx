@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useActionState, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { updateEvent } from '@/services/host/hostService';
@@ -24,7 +24,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
-import InputFieldError from '@/components/shared/InputFieldError';
+
 import { Upload, X } from 'lucide-react';
 import Image from 'next/image';
 
@@ -179,7 +179,11 @@ const EditEventModal = ({ open, onOpenChange, event }: EditEventModalProps) => {
                 joiningFee: Number(formData.joiningFee),
                 capacity: Number(formData.capacity),
             };
-
+if (new Date(formData.date) <= new Date()) {
+  toast.error("Please select a future date");
+  setIsPending(false);
+  return;
+}
             const result = await updateEvent(event.id, data, selectedFile || undefined);
 
             if (result.success) {

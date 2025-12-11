@@ -80,6 +80,7 @@ export const MyProfile = () => {
   }
 
   const user = userInfo.client || userInfo.host || userInfo.admin || userInfo;
+
   const currentInterests = user?.interests || [];
 
   return (

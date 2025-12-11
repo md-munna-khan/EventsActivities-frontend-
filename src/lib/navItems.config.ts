@@ -43,13 +43,13 @@ export const hostNavItems: NavSection[] = [
         roles: ["HOST"],
       },
 
-      {
-        title: "Participants",
-        href: "/host/dashboard/participants",
-        icon: "Users", // ✅ String
-        badge: "new",
-        roles: ["HOST"],
-      },
+      // {
+      //   title: "Participants",
+      //   href: "/host/dashboard/participants",
+      //   icon: "Users", // ✅ String
+      //   badge: "new",
+      //   roles: ["HOST"],
+      // },
     ],
   },
 ];

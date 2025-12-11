@@ -5,13 +5,15 @@ import { parse } from "cookie";
 import jwt from "jsonwebtoken";
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { getUserInfo } from "./getUserInfo";
+
 import { deleteCookie, getCookie, setCookie } from "./tokenHandlers";
 import { serverFetch } from "@/lib/server-fetch";
 import { resetPasswordSchema } from "@/zod/auth.validation";
 import { zodValidator } from "@/lib/zodValidator";
 import { getDefaultDashboardRoute, isValidRedirectForRole, UserRole } from "@/lib/auth-utils";
 import { verifyAccessToken } from "@/lib/jwtHanlders";
+import { getUserInfo } from "./getUserInfo";
+
 
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -45,7 +47,7 @@ export async function updateMyProfile(formData: FormData) {
         if (file && file instanceof File && file.size > 0) {
             uploadFormData.append('file', file);
         }
-
+console.log(uploadFormData)
         const response = await serverFetch.patch(`/user/update-my-profile`, {
             body: uploadFormData,
         });

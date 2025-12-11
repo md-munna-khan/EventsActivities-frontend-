@@ -1,10 +1,16 @@
 import MyBookingEvents from '@/components/modules/event/MyBookingEvents';
+import { getUserBookings } from '@/services/events/eventService';
 import React from 'react';
 
-const MyBookingsPage = () => {
+const MyBookingsPage = async () => {
+    const res = await getUserBookings();
+    const bookings = res?.data || [];
+
     return (
         <div>
-          <MyBookingEvents />
+          {/* <MyBookingEvents bookings={bookings} /> */}
+
+            <MyBookingEvents bookings={bookings} />
         </div>
     );
 };

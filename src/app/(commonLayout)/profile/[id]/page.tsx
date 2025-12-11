@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Calendar, MapPin, Users, Star, Edit } from 'lucide-react';
 import { formatDateTime } from '@/lib/formatters';
-import { formatCurrency } from '@/lib/utils';
+
 import { getInitials } from '@/lib/formatters';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';

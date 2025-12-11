@@ -5,6 +5,7 @@ import EventDetailsClient from '@/components/modules/event/EventDetailsClient';
 import { getUserInfo } from '@/services/auth/getUserInfo';
 
 
+
 interface EventDetailsPageProps {
     params: Promise<{ id: string }>;
 }

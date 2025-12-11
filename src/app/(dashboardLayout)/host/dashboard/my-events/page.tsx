@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import  { Suspense } from 'react';
 import { getMyEvents, IEventFilters } from '@/services/host/hostService';
 import { TableSkeleton } from '@/components/shared/TableSkeleton';
 import MyEventsClient from '@/components/modules/Host/MyEventsClient';

@@ -2,9 +2,10 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, UserRole } from './lib/auth-utils';
-import { getUserInfo } from './services/auth/getUserInfo';
+
 import { deleteCookie, getCookie } from './services/auth/tokenHandlers';
 import { getNewAccessToken } from './services/auth/auth.service';
+import { getUserInfo } from './services/auth/getUserInfo';
 
 
 

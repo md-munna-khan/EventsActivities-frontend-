@@ -1,5 +1,4 @@
 
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
@@ -40,9 +39,14 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
     // Validate with Zod
     const validation = zodValidator(payload, createClientValidation);
     if (validation.success === false) {
-      return validation;
+      return {
+        success: false,
+        errors: validation.errors,
+        message: "Please fix the validation errors and try again",
+      };
     }
     const validatedPayload: any = validation.data;
+    console.log(validatedPayload);
 
     // Detect incoming file (either key 'file' or 'profilePhoto' from the original form)
     const incomingFile = typeof formData.get === "function" ? (formData.get("file") ?? formData.get("profilePhoto")) : null;
@@ -59,7 +63,7 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
       newFormData.append("file", incomingFile as File);
 
       res = await serverFetch.post("/user/create-client", {
-        body: newFormData,
+        body: newFormData, 
       });
     } else {
       res = await serverFetch.post("/user/create-client", {
@@ -121,8 +125,12 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
       }
     }
 
-    // Not successful — forward the backend response (validation errors, duplicates, etc.)
-    return result;
+    // Not successful — forward the backend response with proper error structure
+    return {
+      success: false,
+      errors: result.errors || [],
+      message: result.message || "Registration failed. Please try again.",
+    };
   } catch (error: any) {
     // Re-throw NEXT_REDIRECT so Next.js handles server-side redirect signals
     if (error?.digest?.startsWith?.("NEXT_REDIRECT")) {
@@ -131,6 +139,7 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
     console.error("[registerClient] error:", error);
     return {
       success: false,
+      errors: [],
       message:
         process.env.NODE_ENV === "development"
           ? error?.message ?? "Registration Failed"

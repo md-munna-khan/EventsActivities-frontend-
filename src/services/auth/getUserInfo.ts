@@ -41,8 +41,6 @@ export const getUserInfo = async (): Promise<UserInfo | any> => {
             ...result.data
         };
 
-
-
         return userInfo;
     } catch (error: any) {
         console.log(error);

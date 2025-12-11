@@ -52,21 +52,21 @@ export async function getMyProfile() {
   }
 }
 
-export async function updateMyProfile(formData: FormData) {
-  try {
-    const response = await fetch("/user/update-my-profile", {
-      method: "PATCH",
-      body: formData,
-    });
+// export async function updateMyProfile(formData: FormData) {
+//   try {
+//     const response = await fetch("/user/update-my-profile", {
+//       method: "PATCH",
+//       body: formData,
+//     });
     
-    const result = await response.json();
-    return result;
-  } catch (error: any) {
-    console.error("Error updating profile:", error);
-    return {
-      success: false,
-      message: error.message || "Failed to update profile",
-    };
-  }
-}
+//     const result = await response.json();
+//     return result;
+//   } catch (error: any) {
+//     console.error("Error updating profile:", error);
+//     return {
+//       success: false,
+//       message: error.message || "Failed to update profile",
+//     };
+//   }
+// }
 

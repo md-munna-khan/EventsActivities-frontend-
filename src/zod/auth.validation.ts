@@ -16,39 +16,43 @@ const InterestEnum = z.enum([
 ]);
 
 export const createClientValidation = z.object({
-    password: z.string({
-        error: "Password is required",
-    }),
+    password: z
+        .string({ message: "Password is required" })
+        .min(6, "Password must be at least 6 characters"),
 
     client: z.object({
-        name: z.string({
-            error: "Name is required!",
-        }),
+        name: z
+            .string({ message: "Name is required" })
+            .min(2, "Name must be at least 2 characters")
+            .trim(),
 
-        email: z.string({
-            error: "Email is required!",
-        }),
-         bio : z.string({
-            error: "Bio is required!",
-         }),
+        email: z
+            .string({ message: "Email is required" })
+            .email("Invalid email format"),
 
-        profilePhoto: z.string({
-            error: "Profile photo is required!",
-        }).optional(),
+        bio: z
+            .string({ message: "Bio is required" })
+            .min(5, "Bio must be at least 5 characters")
+            .trim(),
 
-        contactNumber: z.string({
-            error: "Contact Number is required!",
-        }),
+        profilePhoto: z
+            .string({ message: "Profile photo is required" })
+            .optional(),
 
-        location: z.string({
-            error: "Location is required!",
-        }),
+        contactNumber: z
+            .string({ message: "Contact Number is required" })
+            .regex(/^[+]?[0-9]{7,}$/, "Contact number must be valid"),
+
+        location: z
+            .string({ message: "Location is required" })
+            .min(2, "Location must be at least 2 characters")
+            .trim(),
 
         interests: z
             .array(InterestEnum, {
-                error: "Interests are required!",
+                message: "Interests must be valid",
             })
-            .nonempty("At least one interest is required!"),
+            .min(1, "At least one interest is required"),
     }),
 });
 
