@@ -133,7 +133,8 @@ export const MyProfile = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form action={formAction} encType="multipart/form-data">
+            {/* <form action={formAction} encType="multipart/form-data"> */}
+            <form action={formAction} >
               <FieldGroup>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Name */}

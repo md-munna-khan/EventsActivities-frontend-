@@ -44,7 +44,7 @@ export async function getPayments({
     params.set("limit", String(limit));
     if (status) params.set("status", status);
 
-    const res = await serverFetch.get(`/payments?${params.toString()}`);
+    const res = await serverFetch.get(`/payment/payments-history?${params.toString()}`);
 
 console.log(res)
     const json = await res.json();

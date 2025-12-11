@@ -24,7 +24,7 @@ type Props = {
   currentStatus?: string;
 };
 
-const STATUS_OPTIONS = ["ACTIVE", "INACTIVE", "SUSPENDED", "BANNED"];
+const STATUS_OPTIONS = ["ACTIVE", "INACTIVE", "SUSPENDED", "PENDING"];
 
 export default function UpdateStatusButton({ resource, id, currentStatus = "ACTIVE" }: Props) {
   const router = useRouter();

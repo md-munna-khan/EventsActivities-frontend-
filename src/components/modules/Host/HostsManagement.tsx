@@ -1,42 +1,116 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 
 
 
-import { getAllHosts } from '@/services/host/hostService';
-import UpdateHostStatusButton from './UpdateHostStatusButton';
-import DeleteHostButton from './DeleteHostButton';
+// import { getAllHosts } from '@/services/host/hostService';
+// import UpdateHostStatusButton from './UpdateHostStatusButton';
+// import DeleteHostButton from './DeleteHostButton';
+
+// const HostsManagement = async () => {
+//   const res = await getAllHosts({}, { page: 1, limit: 50 });
+
+//   const hosts = res?.data || [];
+//   console.log(hosts)
+
+//   return (
+//     <div>
+//       <h2 className="text-2xl font-semibold">Hosts Management</h2>
+//       {hosts.length === 0 ? (
+//         <div className="text-muted-foreground">No hosts found</div>
+//       ) : (
+//         <div className="overflow-x-auto">
+//           <table className="table w-full">
+//             <thead>
+//               <tr>
+//                 <th>Name</th>
+//                 <th>Email</th>
+//                 <th>Status</th>
+//                 <th>Actions</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {hosts.map((h: any) => (
+//                 <tr key={h.id}>
+//                   <td>{h.name}</td>
+//                   <td>{h.email}</td>
+//                   <td>{h.status}</td>
+//                   <td className="flex gap-2">
+//                     <UpdateHostStatusButton hostId={h.id} currentStatus={h.status} />
+                    
+//                   </td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default HostsManagement;
+
+
+
+
+
+
+/* components/modules/admin/ClientsManagement.tsx */
+import React from "react";
+
+
+
+import { getAllUsers } from "@/services/user/userService";
+import UpdateStatusButton from "../admin/UpdateStatusButton";
+
+type User = {
+  id: string;
+  email?: string | null;
+  role?: string | null;
+  status?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+};
 
 const HostsManagement = async () => {
-  const res = await getAllHosts({}, { page: 1, limit: 50 });
+  const res = await getAllUsers({ role: "HOST" }, { page: 1, limit: 50 });
+  const users: User[] = Array.isArray(res?.data) ? res.data : [];
 
-  const hosts = res?.data || [];
-  console.log(hosts)
+  if (!res || res.success === false) {
+    return (
+      <div>
+        <h2 className="text-2xl font-semibold">Clients Management</h2>
+        <div className="mt-4 text-red-600">Failed to load clients: {res?.message ?? "Unknown error"}</div>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold">Hosts Management</h2>
-      {hosts.length === 0 ? (
-        <div className="text-muted-foreground">No hosts found</div>
+      <h2 className="text-2xl font-semibold">Clients Management</h2>
+
+      {users.length === 0 ? (
+        <div className="mt-4 text-muted-foreground">No clients found</div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="mt-4 overflow-x-auto rounded-md border">
           <table className="table w-full">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
+                <th className="pl-4">Email</th>
+                <th>Role</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th className="text-right pr-4">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {hosts.map((h: any) => (
-                <tr key={h.id}>
-                  <td>{h.name}</td>
-                  <td>{h.email}</td>
-                  <td>{h.status}</td>
-                  <td className="flex gap-2">
-                    <UpdateHostStatusButton hostId={h.id} currentStatus={h.status} />
-                    <DeleteHostButton hostId={h.id} />
+              {users.map((u) => (
+                <tr key={u.id}>
+                  <td className="pl-4">{u.email ?? "-"}</td>
+                  <td>{u.role ?? "-"}</td>
+                  <td>{u.status ?? "-"}</td>
+                  <td className="flex justify-end gap-2 pr-4">
+                    <UpdateStatusButton resource="users" id={u.id} currentStatus={u.status ?? "ACTIVE"} />
+                    
                   </td>
                 </tr>
               ))}
@@ -48,4 +122,5 @@ const HostsManagement = async () => {
   );
 };
 
-export default HostsManagement;
+export default HostsManagement 
+

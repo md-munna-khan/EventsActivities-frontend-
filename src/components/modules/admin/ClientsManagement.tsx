@@ -1,8 +1,8 @@
 /* components/modules/admin/ClientsManagement.tsx */
 import React from "react";
 
-import UpdateStatusButton from "./UpdateStatusButton.client";
-import DeleteButton from "./DeleteButton.client";
+import UpdateStatusButton from "./UpdateStatusButton";
+
 import { getAllUsers } from "@/services/user/userService";
 
 type User = {
@@ -52,7 +52,7 @@ const ClientsManagement = async () => {
                   <td>{u.status ?? "-"}</td>
                   <td className="flex justify-end gap-2 pr-4">
                     <UpdateStatusButton resource="users" id={u.id} currentStatus={u.status ?? "ACTIVE"} />
-                    <DeleteButton resource="users" id={u.id} />
+                    
                   </td>
                 </tr>
               ))}
