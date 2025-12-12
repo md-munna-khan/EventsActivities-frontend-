@@ -1,41 +1,61 @@
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 
 
 
-// import { getAllHosts } from '@/services/host/hostService';
-// import UpdateHostStatusButton from './UpdateHostStatusButton';
-// import DeleteHostButton from './DeleteHostButton';
+// /* components/modules/admin/ClientsManagement.tsx */
+// import React from "react";
+
+
+
+// import { getAllUsers } from "@/services/user/userService";
+// import UpdateStatusButton from "../admin/UpdateStatusButton";
+
+// type User = {
+//   id: string;
+//   email?: string | null;
+//   role?: string | null;
+//   status?: string | null;
+//   createdAt?: string;
+//   updatedAt?: string;
+// };
 
 // const HostsManagement = async () => {
-//   const res = await getAllHosts({}, { page: 1, limit: 50 });
+//   const res = await getAllUsers({ role: "HOST" }, { page: 1, limit: 50 });
+//   const users: User[] = Array.isArray(res?.data) ? res.data : [];
 
-//   const hosts = res?.data || [];
-//   console.log(hosts)
+//   if (!res || res.success === false) {
+//     return (
+//       <div>
+//         <h2 className="text-2xl font-semibold">Hosts Management</h2>
+//         <div className="mt-4 text-red-600">Failed to load hosts: {res?.message ?? "Unknown error"}</div>
+//       </div>
+//     );
+//   }
 
 //   return (
 //     <div>
 //       <h2 className="text-2xl font-semibold">Hosts Management</h2>
-//       {hosts.length === 0 ? (
-//         <div className="text-muted-foreground">No hosts found</div>
+
+//       {users.length === 0 ? (
+//         <div className="mt-4 text-muted-foreground">No clients found</div>
 //       ) : (
-//         <div className="overflow-x-auto">
+//         <div className="mt-4 overflow-x-auto rounded-md border">
 //           <table className="table w-full">
 //             <thead>
 //               <tr>
-//                 <th>Name</th>
-//                 <th>Email</th>
+//                 <th className="pl-4">Email</th>
+//                 <th>Role</th>
 //                 <th>Status</th>
-//                 <th>Actions</th>
+//                 <th className="text-right pr-4">Actions</th>
 //               </tr>
 //             </thead>
 //             <tbody>
-//               {hosts.map((h: any) => (
-//                 <tr key={h.id}>
-//                   <td>{h.name}</td>
-//                   <td>{h.email}</td>
-//                   <td>{h.status}</td>
-//                   <td className="flex gap-2">
-//                     <UpdateHostStatusButton hostId={h.id} currentStatus={h.status} />
+//               {users.map((u) => (
+//                 <tr key={u.id}>
+//                   <td className="pl-4">{u.email ?? "-"}</td>
+//                   <td>{u.role ?? "-"}</td>
+//                   <td>{u.status ?? "-"}</td>
+//                   <td className="flex justify-end gap-2 pr-4">
+//                     <UpdateStatusButton resource="users" id={u.id} currentStatus={u.status ?? "ACTIVE"} />
                     
 //                   </td>
 //                 </tr>
@@ -48,20 +68,26 @@
 //   );
 // };
 
-// export default HostsManagement;
+// export default HostsManagement 
 
 
 
-
-
-
-/* components/modules/admin/ClientsManagement.tsx */
 import React from "react";
-
-
 
 import { getAllUsers } from "@/services/user/userService";
 import UpdateStatusButton from "../admin/UpdateStatusButton";
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+
 
 type User = {
   id: string;
@@ -72,55 +98,93 @@ type User = {
   updatedAt?: string;
 };
 
+// Server component (Next.js app router) — keeps the async data fetching at the top level
 const HostsManagement = async () => {
   const res = await getAllUsers({ role: "HOST" }, { page: 1, limit: 50 });
   const users: User[] = Array.isArray(res?.data) ? res.data : [];
 
   if (!res || res.success === false) {
     return (
-      <div>
-        <h2 className="text-2xl font-semibold">Hosts Management</h2>
-        <div className="mt-4 text-red-600">Failed to load hosts: {res?.message ?? "Unknown error"}</div>
-      </div>
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Hosts Management</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-sm text-destructive">Failed to load hosts: {res?.message ?? "Unknown error"}</div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold">Clients Management</h2>
-
-      {users.length === 0 ? (
-        <div className="mt-4 text-muted-foreground">No clients found</div>
-      ) : (
-        <div className="mt-4 overflow-x-auto rounded-md border">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th className="pl-4">Email</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th className="text-right pr-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u.id}>
-                  <td className="pl-4">{u.email ?? "-"}</td>
-                  <td>{u.role ?? "-"}</td>
-                  <td>{u.status ?? "-"}</td>
-                  <td className="flex justify-end gap-2 pr-4">
-                    <UpdateStatusButton resource="users" id={u.id} currentStatus={u.status ?? "ACTIVE"} />
-                    
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold">Hosts Management</h2>
+        <div className="flex items-center gap-3">
+          <Input placeholder="Search by email or name" className="max-w-sm" />
+          <Button variant="outline">Filter</Button>
         </div>
-      )}
+      </div>
+
+      <Card className="overflow-hidden">
+        <CardContent className="p-0">
+          <div className="w-full overflow-auto">
+            <table className="w-full table-auto">
+              <thead>
+                <tr className="text-sm text-muted-foreground">
+                  <th className="text-left pl-6 py-3">Host</th>
+                  <th className="text-left py-3">Role</th>
+                  <th className="text-left py-3">Status</th>
+                  <th className="text-right pr-6 py-3">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((u) => (
+                  <tr key={u.id} className="border-t last:border-b">
+                    <td className="pl-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-9 w-9">
+                          {u.email ? (
+                            <AvatarFallback>{u.email.charAt(0).toUpperCase()}</AvatarFallback>
+                          ) : (
+                            <AvatarFallback>H</AvatarFallback>
+                          )}
+                        </Avatar>
+                        <div className="min-w-0">
+                          <div className="font-semibold truncate">{u.email ?? "-"}</div>
+                          <div className="text-xs text-muted-foreground truncate">Joined: {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "-"}</div>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="py-4">
+                      <div className="text-sm">{u.role ?? "-"}</div>
+                    </td>
+
+                    <td className="py-4">
+                      <Badge variant={u.status === 'ACTIVE' ? 'secondary' : 'outline'}>
+                        {u.status ?? "-"}
+                      </Badge>
+                    </td>
+
+                    <td className="pr-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <UpdateStatusButton resource="users" id={u.id} currentStatus={u.status ?? "ACTIVE"} />
+
+                       
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
 
-export default HostsManagement 
+export default HostsManagement;
+
 

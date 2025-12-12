@@ -116,18 +116,18 @@ const AdminMetaDashboard = async () => {
         {/* Secondary Stats - 3 Column Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Revenue Card - Premium Style */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-white shadow-xl">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-10 rounded-full -mr-20 -mt-20" />
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary/80  shadow-xl">
+            <div className="absolute top-0 right-0 w-40 h-40 opacity-10 rounded-full -mr-20 -mt-20" />
             <div className="relative p-8">
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <p className="text-white/80 text-sm font-medium mb-2">Total Revenue</p>
                   <p className="text-5xl font-bold">${(totals.revenue ?? 0).toLocaleString()}</p>
                 </div>
-                <div className="p-4 rounded-lg bg-white bg-opacity-20 backdrop-blur">
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                <div className="p-4 rounded-lg  bg-opacity-20 backdrop-blur">
+                  {/* <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M8.16 5.314l4.897-.795A2 2 0 0116 6.416v8.001a2 2 0 01-1.943 1.897l-4.897.795a1 1 0 01-.11.005H7a2 2 0 01-2-2V7.314a2 2 0 012-2h1.16z" />
-                  </svg>
+                  </svg> */}
                 </div>
               </div>
               <div className="flex items-center gap-4 pt-6 border-t border-white/20">
@@ -139,19 +139,19 @@ const AdminMetaDashboard = async () => {
           </div>
 
           {/* Pending Applications Card - Warning Style */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-destructive to-destructive/80 text-white shadow-xl">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-10 rounded-full -mr-20 -mt-20" />
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-destructive to-destructive/80  shadow-xl">
+            <div className="absolute top-0 right-0 w-40 h-40 opacity-10 rounded-full -mr-20 -mt-20" />
             <div className="relative p-8">
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <p className="text-white/80 text-sm font-medium mb-2">Pending Applications</p>
                   <p className="text-5xl font-bold">{totals.pendingHostApplications ?? 0}</p>
                 </div>
-                <div className="p-4 rounded-lg bg-white bg-opacity-20 backdrop-blur">
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                <div className="p-4 rounded-lg  bg-opacity-20 backdrop-blur">
+                  {/* <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                     <path d="M4 5a2 2 0 012-2 1 1 0 000 2H2a1 1 0 100 2h1a1 1 0 000 2H2a1 1 0 100 2h1a1 1 0 000 2H2a1 1 0 100 2h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.382a1 1 0 00-.894.553l-.448.894a1 1 0 01-.894.553H10a1 1 0 100 2h1.118a1 1 0 01.894.553l.448.894a1 1 0 00.894.553h2.382a2 2 0 002-2V5a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
-                  </svg>
+                  </svg> */}
                 </div>
               </div>
               <div className="pt-6 border-t border-white/20">
@@ -161,15 +161,15 @@ const AdminMetaDashboard = async () => {
           </div>
 
           {/* Event Success Rate Card - Info Style */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-accent to-accent/80 text-white shadow-xl">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-10 rounded-full -mr-20 -mt-20" />
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-accent to-accent/80 shadow-xl">
+            <div className="absolute top-0 right-0 w-40 h-40 opacity-10 rounded-full -mr-20 -mt-20" />
             <div className="relative p-8">
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <p className="text-white/80 text-sm font-medium mb-2">Success Rate</p>
                   <p className="text-5xl font-bold">{successPercentage}%</p>
                 </div>
-                <div className="p-4 rounded-lg bg-white bg-opacity-20 backdrop-blur">
+                <div className="p-4 rounded-lg  bg-opacity-20 backdrop-blur">
                   <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
                   </svg>
@@ -226,23 +226,23 @@ const AdminMetaDashboard = async () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-slate-200">
-                    <th className="text-left py-4 px-4 font-semibold text-slate-900">Event Title</th>
-                    <th className="text-left py-4 px-4 font-semibold text-slate-900">Status</th>
-                    <th className="text-left py-4 px-4 font-semibold text-slate-900">Created</th>
+                    <th className="text-left py-4 px-4 font-semibold ">Event Title</th>
+                    <th className="text-left py-4 px-4 font-semibold ">Status</th>
+                    <th className="text-left py-4 px-4 font-semibold ">Created</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentEvents.map((event: any, idx: number) => (
-                    <tr key={event.id} className={`border-b border-slate-100 hover:bg-slate-50 transition-colors ${idx !== recentEvents.length - 1 ? '' : ''}`}>
+                    <tr key={event.id} className={`border-b border-slate-100  transition-colors ${idx !== recentEvents.length - 1 ? '' : ''}`}>
                       <td className="py-4 px-4">
-                        <p className="font-medium text-slate-900">{event.title}</p>
+                        <p className="font-medium ">{event.title}</p>
                       </td>
                       <td className="py-4 px-4">
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadgeColor(event.status)}`}>
                           {event.status}
                         </span>
                       </td>
-                      <td className="py-4 px-4 text-sm text-slate-600">
+                      <td className="py-4 px-4 text-sm text-slate-400">
                         {new Date(event.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                       </td>
                     </tr>

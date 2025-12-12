@@ -174,7 +174,8 @@ const EditEventModal = ({ open, onOpenChange, event }: EditEventModalProps) => {
                 title: formData.title,
                 category: formData.category,
                 description: formData.description,
-                date: formData.date,
+                // Convert local datetime to ISO UTC to keep exact selection across timezones
+                date: new Date(formData.date).toISOString(),
                 location: formData.location,
                 joiningFee: Number(formData.joiningFee),
                 capacity: Number(formData.capacity),

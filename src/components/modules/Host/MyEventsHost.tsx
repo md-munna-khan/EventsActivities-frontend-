@@ -231,7 +231,7 @@ const MyEventsHost = ({ initialEvents, initialMeta }: MyEventsClientProps) => {
                 <div className="flex items-center gap-4 flex-1">
                     <SearchFilter 
                         placeholder="Search events..." 
-                        paramName="searchTerm"
+                        paramName="search"
                     />
                     <SelectFilter
                         paramName="category"

@@ -83,7 +83,7 @@ const ClientDashboardClient = ({ bookings }: ClientDashboardClientProps) => {
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-5xl font-black bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient-x">
+                            <h1 className="text-5xl font-black bg-gradient-to-r from-primary via-accent to-primary bg-clip-text  animate-gradient-x">
                                 My Dashboard
                             </h1>
                             <p className="text-muted-foreground mt-2 text-lg">Track your events, bookings, and activity</p>

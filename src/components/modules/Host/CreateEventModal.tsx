@@ -102,7 +102,7 @@ const CreateEventModal = ({ open, onOpenChange }: CreateEventModalProps) => {
         title: '',
         category: '',
         description: '',
-        date: '',
+        date: getLocalDateTimeNow(),
         location: '',
         joiningFee: '',
         capacity: '',
@@ -137,7 +137,8 @@ const CreateEventModal = ({ open, onOpenChange }: CreateEventModalProps) => {
                 title: formData.title,
                 category: formData.category,
                 description: formData.description,
-                date: getLocalDateTimeNow(),
+                // Convert local datetime input to ISO string (UTC) to avoid timezone shifts
+                date: new Date(formData.date).toISOString(),
                 location: formData.location,
                 joiningFee: Number(formData.joiningFee),
                 capacity: Number(formData.capacity),
@@ -149,7 +150,7 @@ if (new Date(formData.date) <= new Date()) {
 }
 
             const result = await createEvent(data, selectedFile || undefined);
-
+        console.log(result)
             if (result.success) {
                 toast.success('Event created successfully!');
                 onOpenChange(false);
@@ -164,7 +165,7 @@ if (new Date(formData.date) <= new Date()) {
                     title: '',
                     category: '',
                     description: '',
-                    date: '',
+                    date: getLocalDateTimeNow(),
                     location: '',
                     joiningFee: '',
                     capacity: '',
@@ -189,7 +190,7 @@ if (new Date(formData.date) <= new Date()) {
                 title: '',
                 category: '',
                 description: '',
-                date: '',
+                date: getLocalDateTimeNow(),
                 location: '',
                 joiningFee: '',
                 capacity: '',
@@ -268,6 +269,7 @@ if (new Date(formData.date) <= new Date()) {
                                     type="datetime-local"
                                     value={formData.date}
                                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                    min={getLocalDateTimeNow()}
                                     required
                                     disabled={isPending}
                                 />

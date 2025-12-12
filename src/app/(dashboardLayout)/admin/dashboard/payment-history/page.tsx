@@ -2,15 +2,15 @@ import { getPayments } from "@/services/admin/payment.service";
 import PaymentHistoryClient from "@/components/modules/admin/PaymentHistoryClient";
 
 interface PageProps {
-    searchParams: {
+    search: {
         page?: string;
         status?: string;
     };
 }
 
-const PaymentHistoryPage = async ({ searchParams }: PageProps) => {
-    const page = Number(searchParams?.page) || 1;
-    const status = searchParams?.status;
+const PaymentHistoryPage = async ({ search }: PageProps) => {
+    const page = Number(search?.page) || 1;
+    const status = search?.status;
 
     const result = await getPayments({ page, limit: 12, status });
     const payments = result.data || [];
@@ -20,7 +20,7 @@ const PaymentHistoryPage = async ({ searchParams }: PageProps) => {
         <PaymentHistoryClient
             payments={payments}
             meta={meta}
-            statusFilter={status || "all"}
+            // statusFilter={status || "all"}
         />
     );
 };

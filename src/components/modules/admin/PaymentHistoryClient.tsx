@@ -105,13 +105,13 @@ const PaymentHistoryClient: React.FC<PaymentHistoryClientProps> = ({ payments, m
     return `?${params.toString()}`;
   };
 
-  const filters = [
-    { label: "All", value: "all" },
-    { label: "Paid", value: "PAID" },
-    { label: "Pending", value: "PENDING" },
-    { label: "Failed", value: "FAILED" },
-    { label: "Cancelled", value: "CANCELLED" },
-  ];
+  // const filters = [
+  //   { label: "All", value: "all" },
+  //   { label: "Paid", value: "PAID" },
+  //   { label: "Pending", value: "PENDING" },
+  //   { label: "Failed", value: "FAILED" },
+  //   { label: "Cancelled", value: "CANCELLED" },
+  // ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
@@ -165,7 +165,7 @@ const PaymentHistoryClient: React.FC<PaymentHistoryClientProps> = ({ payments, m
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3">
+        {/* <div className="flex flex-wrap items-center gap-3">
           {filters.map((f) => {
             const active = statusFilter === f.value || (!statusFilter && f.value === "all");
             return (
@@ -182,7 +182,7 @@ const PaymentHistoryClient: React.FC<PaymentHistoryClientProps> = ({ payments, m
               </Link>
             );
           })}
-        </div>
+        </div> */}
 
         <Separator />
 
