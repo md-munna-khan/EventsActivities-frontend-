@@ -69,7 +69,7 @@ interface MyEventsClientProps {
     initialMeta: Meta;
 }
 
-const MyEventsClient = ({ initialEvents, initialMeta }: MyEventsClientProps) => {
+const MyEventsHost = ({ initialEvents, initialMeta }: MyEventsClientProps) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [isPending, startTransition] = useTransition();
@@ -488,5 +488,5 @@ const MyEventsClient = ({ initialEvents, initialMeta }: MyEventsClientProps) => 
     );
 };
 
-export default MyEventsClient;
+export default MyEventsHost;
 

@@ -1,7 +1,8 @@
 import  { Suspense } from 'react';
 import { getMyEvents, IEventFilters } from '@/services/host/hostService';
 import { TableSkeleton } from '@/components/shared/TableSkeleton';
-import MyEventsClient from '@/components/modules/Host/MyEventsClient';
+import MyEventsHost from '@/components/modules/Host/MyEventsClient';
+
 
 interface MyEventsPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -45,7 +46,7 @@ const MyEventsPage = async ({ searchParams }: MyEventsPageProps) => {
             </div>
 
             <Suspense fallback={<TableSkeleton columns={7} rows={10} />}>
-                <MyEventsClient 
+                <MyEventsHost 
                     initialEvents={events} 
                     initialMeta={meta}
                 />

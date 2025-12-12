@@ -84,6 +84,9 @@ const EventDetailsClient = ({ event, currentUserId }: EventDetailsClientProps) =
     // Check if current user is the host
     const isHost = currentUserId && event.hostId && String(currentUserId) === String(event.hostId);
     
+    // Check if event date is over
+    const isEventPast = new Date(event.date) < new Date();
+    
     // Check participation status and user role
     useEffect(() => {
         const checkStatus = async () => {
@@ -541,7 +544,7 @@ const EventDetailsClient = ({ event, currentUserId }: EventDetailsClientProps) =
                                         <Button
                                             className="w-full h-14 bg-white text-primary hover:bg-white/90 text-lg font-black shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                                             onClick={handleJoin}
-                                            disabled={isPending || event.status !== 'OPEN' || (event.participantCount || 0) >= event.capacity}
+                                            disabled={isPending || event.status !== 'OPEN' || (event.participantCount || 0) >= event.capacity || isEventPast}
                                         >
                                             {isPending ? 'Processing...' : (
                                                 <span className="flex items-center gap-2">
@@ -556,9 +559,14 @@ const EventDetailsClient = ({ event, currentUserId }: EventDetailsClientProps) =
                                             This event is not open for joining
                                         </p>
                                     )}
-                                    {(event.participantCount || 0) >= event.capacity && event.status === 'OPEN' && (
+                                    {(event.participantCount || 0) >= event.capacity && event.status === 'OPEN' && !isEventPast && (
                                         <p className="text-sm text-white/90 mt-3 text-center font-semibold">
                                             This event is full
+                                        </p>
+                                    )}
+                                    {isEventPast && (
+                                        <p className="text-sm text-white/90 mt-3 text-center font-semibold">
+                                            This event has already passed
                                         </p>
                                     )}
                                 </CardContent>
