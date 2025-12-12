@@ -93,7 +93,7 @@ const PublicNavbar = () => {
           ) : (
             <>
               <Link href="/login">
-                <Button variant="ghost">Login</Button>
+                <Button variant="default">Login</Button>
               </Link>
               {/* <Link href="/register">
                 <Button>Register</Button>
