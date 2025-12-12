@@ -7,7 +7,7 @@ function PublicFooter() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
             <h3 className="font-bold mb-2">Evenzo Doc</h3>
-            <p className="text-sm text-muted-foreground">Your health is our priority. We are here to provide the best medical services.</p>
+            <p className="text-sm text-muted-foreground">Your Events is our priority. We are here to provide the best event services.</p>
           </div>
           <div>
             <h3 className="font-semibold mb-2">Quick Links</h3>
@@ -30,9 +30,9 @@ function PublicFooter() {
           <div>
             <h3 className="font-semibold mb-2">Contact Us</h3>
             <p className="text-sm text-muted-foreground">
-              123 Medical Lane<br />
-              Health City, HC 12345<br />
-              contact@phdoc.com
+             Mirpur 2 <br />
+              Dhaka<br />
+              contact:01867418698
             </p>
           </div>
         </div>
