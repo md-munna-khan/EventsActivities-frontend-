@@ -1,188 +1,165 @@
-# EventsActivities Frontend
+(# Events & Activities — Frontend)
 
-A modern, full-featured frontend application for managing events and activities, built with Next.js 16, TypeScript, and Tailwind CSS. This application provides role-based access control with separate dashboards for Administrators, Hosts, and Clients.
+(Live client: https://events-activities-frontend-chi.vercel.app)
+(Live server: https://events-activities-backend.vercel.app)
 
-## 🚀 Features
+(GitHub)
+(- Frontend: https://github.com/md-munna-khan/EventsActivities-frontend)
+(- Backend:  https://github.com/md-munna-khan/EventsActivities-backend)
 
-### Authentication
-- User registration and login
-- Password reset functionality
-- Forget password flow
-- JWT-based authentication
-- Secure token handling
+(Video walkthrough: https://drive.google.com/file/d/1IrgrVmQaY6CqQvTg5ChHipD2k1jyZXRN/view?usp=sharing)
 
-### Role-Based Access Control
-The application supports three distinct user roles:
+(## Project Summary)
 
-#### 👤 **Client**
-- View and manage appointments
-- Book new appointments
-- Access medical records and prescriptions
-- View health records
-- Profile management
+(Events & Activities is a social platform to discover, create and join real-world events (hikes, concerts, sports, hobby meetups, etc.). Roles include Client (regular user), Host (creates and manages events), and Admin (moderation and management).)
 
-#### 🎯 **Host**
-- Create and manage events
-- View all events and personal events
-- Manage event participants
-- Schedule management
-- Event details management
+(This repository contains the Frontend (Next.js App Router). The Backend repo (Prisma + PostgreSQL + Node/Express or similar) exposes the API endpoints used by the frontend.)
 
-#### 🔐 **Admin**
-- User management (Admins, Doctors, Patients)
-- Hospital management
-- Appointment management
-- Schedule management
-- Specialities management
+(## Tech stack)
 
-### UI/UX Features
-- 🎨 Modern, responsive design with Tailwind CSS
-- 🌓 Dark/Light theme support
-- 📱 Mobile-responsive layout
-- 🎭 Beautiful UI components from shadcn/ui
-- ⚡ Fast and optimized performance
-- 🔔 Toast notifications for user feedback
-- 📊 Data tables with pagination and filtering
+(- Frontend: Next.js (App Router), React, TypeScript, Tailwind CSS)
+(- Images: Next/Image, Cloudinary for hosted media)
+(- Authentication: JWT via secure httpOnly cookies)
+(- Backend: Node (Express/Nest/Next.js API), Prisma ORM, PostgreSQL)
+(- Deployment: Vercel (frontend) and Vercel/Heroku for backend (live links above))
 
-## 🛠️ Tech Stack
+(## Features)
 
-### Core
-- **Next.js 16.0.0** - React framework with App Router
-- **React 19.2.0** - UI library
-- **TypeScript 5** - Type safety
-- **Tailwind CSS 4** - Styling
+(- Role-based authentication: Client, Host, Admin)
+(- Event CRUD (Host): create, edit, delete events)
+(- Join/leave events (Client))
+(- Host approval workflow (Admin approves hosts))
+(- Reviews & ratings for completed events)
+(- Dashboard views per role (Client/Host/Admin))
+(- Image upload via Cloudinary)
+(- Payment hooks (stubbed / integrated depending on backend))
 
-### UI Components
-- **shadcn/ui** - High-quality component library
-- **Radix UI** - Accessible component primitives
-- **Lucide React** - Icon library
-- **Sonner** - Toast notifications
+(## Credentials (for testing))
 
-### Utilities
-- **Zod 4.1.12** - Schema validation
-- **date-fns 4.1.0** - Date formatting
-- **jsonwebtoken** - JWT handling
-- **next-themes** - Theme management
-- **react-spinners** - Loading indicators
+(- Admin)
+	(- Email: munnamia0200@gmail.com)
+	(- Password: Admin@12345)
 
-## 📦 Installation
+(- Host)
+	(- Email: host@gmail.com)
+	(- Password: 123456)
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd EventsActivities-frontend
-   ```
+(- Client)
+	(- Email: user@gmail.com)
+	(- Password: 123456)
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+(Notes:)
+(- To test reviews and "mark as complete" flows use the Host and Client credentials above. Events cannot be created with a date in the past / present during normal flows for data-safety — two events in the demo have been adjusted to allow testing.)
 
-3. **Set up environment variables**
-   Create a `.env.local` file in the root directory:
-   ```env
-   # Add your environment variables here
-   # Example:
-   # NEXT_PUBLIC_API_URL=your_api_url
-   # JWT_SECRET=your_jwt_secret
-   ```
+(## Local development — Frontend)
 
-4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+(Prereqs:)
+(- Node.js (16+ recommended))
+(- npm or pnpm/yarn)
 
-5. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+(Clone the frontend repo and install:)
 
-## 📜 Available Scripts
+(PowerShell / cmd)
+(```powershell)
+(git clone https://github.com/md-munna-khan/EventsActivities-frontend.git)
+(cd EventsActivities-frontend)
+(npm install)
+(# or pnpm install)
+(```)
 
-- `npm run dev` - Start the development server
-- `npm run build` - Build the application for production
-- `npm run start` - Start the production server
-- `npm run lint` - Run ESLint to check code quality
+(Create a `.env.local` file in the frontend root with values similar to:)
 
-## 📁 Project Structure
+(```env)
+(# Base URL for API (backend). Example:)
+(NEXT_PUBLIC_API_BASE_URL=https://events-activities-backend.vercel.app)
 
-```
-src/
-├── app/                    # Next.js App Router pages
-│   ├── (commonLayout)/    # Public pages with common layout
-│   │   ├── (auth)/        # Authentication pages
-│   │   └── page.tsx       # Home page
-│   └── (dashboardLayout)/ # Protected dashboard pages
-│       └── admin/         # Admin dashboard
-├── components/            # React components
-│   ├── modules/           # Feature-specific modules
-│   │   └── Dashboard/     # Dashboard components
-│   ├── shared/            # Reusable shared components
-│   └── ui/                # shadcn/ui components
-├── hooks/                 # Custom React hooks
-├── lib/                   # Utility functions
-│   ├── auth-utils.ts      # Authentication utilities
-│   ├── formatters.ts      # Data formatting
-│   ├── jwtHanlders.ts     # JWT token handling
-│   └── navItems.config.ts # Navigation configuration
-├── services/              # API service functions
-│   └── auth/              # Authentication services
-├── types/                 # TypeScript type definitions
-└── zod/                   # Zod validation schemas
-```
+(# Optional: public Cloudinary key or other public config)
+(NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your_preset)
+(NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud)
+(```)
 
-## 🔐 Authentication Flow
+(Run the dev server:)
 
-1. **Registration**: Users can create an account with email and password
-2. **Login**: Users authenticate with credentials and receive JWT tokens
-3. **Token Management**: Tokens are securely stored and managed
-4. **Protected Routes**: Dashboard routes require authentication
-5. **Role-Based Routing**: Users are redirected to their role-specific dashboard
+(```powershell)
+(npm run dev)
+(# or pnpm dev)
+(```)
 
-## 🎨 Theming
+(Open http://localhost:3000)
 
-The application supports both light and dark themes:
-- Theme preference is stored and persisted
-- System theme detection is enabled
-- Smooth theme transitions
+(## Local development — Backend (brief))
 
-## 🔧 Configuration
+(The backend repo is here: https://github.com/md-munna-khan/EventsActivities-backend)
 
-### Next.js Config
-- Image optimization with Cloudinary support
-- React Compiler support (optional)
+(Typical steps (refer to backend README for exact commands):)
 
-### Navigation
-Navigation items are configured in `src/lib/navItems.config.ts` and are dynamically generated based on user roles.
+(```powershell)
+(git clone https://github.com/md-munna-khan/EventsActivities-backend.git)
+(cd EventsActivities-backend)
+(npm install)
 
-## 📝 Code Quality
+(# Add .env with DATABASE_URL, JWT_SECRET, CLOUDINARY_*, STRIPE keys, etc.)
+(# Run Prisma migrations / seeds)
+(npx prisma migrate dev --name init)
+(npm run dev)
+(```)
 
-- **TypeScript** for type safety
-- **ESLint** for code linting
-- **Zod** for runtime validation
-- Consistent code formatting
+(Important backend ENV vars (examples))
 
-## 🤝 Contributing
+(```env)
+(# Postgres connection string)
+(DATABASE_URL=postgresql://user:password@localhost:5432/events_db)
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+(# JWT secret used to sign/verify access tokens)
+(JWT_SECRET=very_secret_change_me)
 
-## 📄 License
+(# Cloudinary)
+(CLOUDINARY_CLOUD_NAME=...)
+(CLOUDINARY_API_KEY=...)
+(CLOUDINARY_API_SECRET=...)
 
-This project is private and proprietary.
+(# Optional payment provider keys)
+(STRIPE_SECRET_KEY=...)
+(```)
 
-## 👥 Authors
+(## Database & Prisma)
 
-- Your Team Name
+(- Backend uses Prisma ORM with PostgreSQL. Run migrations and seeds on the backend repo as needed.)
 
-## 🙏 Acknowledgments
+(## Deployment)
 
-- Next.js team for the amazing framework
-- shadcn for the beautiful component library
-- All open-source contributors whose packages made this project possible
+(- Frontend: deployed to Vercel (see live link above). Point `NEXT_PUBLIC_API_BASE_URL` to your backend deployment.)
+(- Backend: ensure environment variables are configured on your host provider. For Postgres use a managed DB instance and update `DATABASE_URL`.)
 
----
+(## Common Development Notes & Troubleshooting)
 
-**Note**: This is a frontend application. Make sure you have the corresponding backend API running and properly configured for full functionality.
+(- Next/Image warnings)
+	(- When using `fill` on `next/image`, include a `sizes` prop to help Next compute optimal image sizes (e.g. `sizes="(max-width: 768px) 100vw, 50vw"`).)
+	(- When you style only width or height in CSS for an Image, also set the other dimension to `auto` (e.g. `style={{ width: '100%', height: 'auto' }}`) to preserve aspect ratio.)
+	(- Filename note: the repository contains a logo asset with a trailing space in the filename (`public/evenzo .png`). Rename it to `evenzo.png` and update `src/components/shared/logo.tsx` to avoid tooling issues.)
 
+(- Server actions and redirects (Next.js App router))
+	(- Server actions that call `redirect()` throw a NEXT_REDIRECT control flow. If you use `useActionState()` on the client, prefer returning a serializable object like `{ success: true, redirectTo: '/path' }` from the server action and perform `router.push()` on the client. This avoids the client runtime error "An unexpected response was received from the server." observed during development.)
+
+(- User info API shape)
+	(- `getUserInfo()` may return different shapes depending on the caller (API response vs direct server action). UI code should be defensive when reading properties like `role` and `name` (e.g. `userInfo?.role ?? 'CLIENT'`).)
+
+(## Tests)
+
+(- No automated test suite is included by default. To manually test:)
+	(1. Start backend and frontend)
+	(2. Login with provided credentials)
+	(3. Test role-specific flows: create event (Host), approve host (Admin), join event (Client), mark complete + add review (Host/Client))
+
+(## Known issues / TODOs)
+
+(- Some Tailwind class rename warnings show up in linter output (these are cosmetic and due to Tailwind updates).)
+(- Improve server-action -> client redirect: convert server redirects to serializable responses or handle NEXT_REDIRECT on the client.)
+
+(## Support / Contact)
+
+(If you want me to finalize cleanup tasks (rename the logo file, add `sizes` to every `fill` image, and convert `loginUser` redirect to return `redirectTo`), say which step to take first and I will apply the patches.)
+
+(---)
+
+(Happy hacking! — If you want I can also produce a short CONTRIBUTING.md, CODE_OF_CONDUCT, or CI (GitHub Actions) setup for this project.)
