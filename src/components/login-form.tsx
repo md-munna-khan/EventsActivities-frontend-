@@ -1,6 +1,6 @@
 "use client";
 import { loginUser } from "@/services/auth/loginUser";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import InputFieldError from "./shared/InputFieldError";
 import { Button } from "./ui/button";
@@ -10,6 +10,9 @@ import { Input } from "./ui/input";
 const LoginForm = ({ redirect }: { redirect?: string }) => {
   const [state, formAction, isPending] = useActionState(loginUser, null);
 
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+
   useEffect(() => {
     if (state && !state.success && state.message) {
       toast.error(state.message);
@@ -18,6 +21,47 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
 
   return (
     <form action={formAction}>
+      {/* Quick-fill credentials for testing/demo */}
+      <div className="mb-4 flex gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            const e = emailRef.current;
+            const p = passwordRef.current;
+            if (e) e.value = "munnamia0200@gmail.com";
+            if (p) p.value = "Admin@12345";
+          }}
+        >
+          Admin
+        </Button>
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            const e = emailRef.current;
+            const p = passwordRef.current;
+            if (e) e.value = "host@gmail.com";
+            if (p) p.value = "123456";
+          }}
+        >
+          Host
+        </Button>
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            const e = emailRef.current;
+            const p = passwordRef.current;
+            if (e) e.value = "user@gmail.com";
+            if (p) p.value = "123456";
+          }}
+        >
+          Client
+        </Button>
+      </div>
       {redirect && <input type="hidden" name="redirect" value={redirect} />}
       <FieldGroup>
         <div className="grid grid-cols-1 gap-4">
@@ -29,6 +73,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
               name="email"
               type="email"
               placeholder="m@example.com"
+              ref={emailRef}
               //   required
             />
 
@@ -43,6 +88,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
               name="password"
               type="password"
               placeholder="Enter your password"
+              ref={passwordRef}
               //   required
             />
             <InputFieldError field="password" state={state} />

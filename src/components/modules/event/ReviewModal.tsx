@@ -50,7 +50,7 @@ export const ReviewModal = ({
     setIsPending(true);
     try {
       const result = await createEventReview(eventId, rating, comment);
-      console.log(result)
+
 
       if (result.success) {
         toast.success('Review submitted successfully!');

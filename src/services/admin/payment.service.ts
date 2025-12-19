@@ -46,7 +46,7 @@ export async function getPayments({
 
     const res = await serverFetch.get(`/payment/payments-history?${params.toString()}`);
 
-console.log(res)
+
     const json = await res.json();
 
     // Some backends wrap data; normalize

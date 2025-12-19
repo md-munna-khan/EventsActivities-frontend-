@@ -150,7 +150,7 @@ if (new Date(formData.date) <= new Date()) {
 }
 
             const result = await createEvent(data, selectedFile || undefined);
-        console.log(result)
+       
             if (result.success) {
                 toast.success('Event created successfully!');
                 onOpenChange(false);

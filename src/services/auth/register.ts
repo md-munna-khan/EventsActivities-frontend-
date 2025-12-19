@@ -46,7 +46,7 @@ export const registerClient = async (_currentState: any, formData: FormData): Pr
       };
     }
     const validatedPayload: any = validation.data;
-    console.log(validatedPayload);
+
 
     // Detect incoming file (either key 'file' or 'profilePhoto' from the original form)
     const incomingFile = typeof formData.get === "function" ? (formData.get("file") ?? formData.get("profilePhoto")) : null;
