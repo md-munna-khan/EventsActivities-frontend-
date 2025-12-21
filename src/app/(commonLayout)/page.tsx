@@ -15,7 +15,7 @@ import {
  
   Zap
 } from 'lucide-react';
-import { getEvents } from '@/services/host/hostService';
+import { getAllHosts, getEvents } from '@/services/host/hostService';
 import Image from 'next/image';
 import { getAllUsers } from '@/services/user/userService';
 
@@ -36,8 +36,11 @@ const HomePage = async () => {
   const eventsCountResult = await getEvents({ page: 1, limit: 1 });
   const eventsCount = eventsCountResult?.meta?.total ?? (Array.isArray(eventsCountResult?.data) ? eventsCountResult.data.length : 0);
   // Fetch top-rated hosts (limit 3)
-  const topHostsResult = await getAllUsers({ role: 'HOST' }, { page: 1, limit: 3, sortBy: 'rating', sortOrder: 'desc' });
+  const topHostsResult = await getAllHosts();
   const topHosts = Array.isArray(topHostsResult?.data) ? topHostsResult.data : [];
+ console.log('topHostsResult:', topHostsResult);
+topHostsResult.data?.sort((a: any, b: any) => (b.rating || 0) - (a.rating || 0));
+const topHostsLimited  = topHosts.slice(0, 3);
   const featuredEvents = eventsResult.success && eventsResult.data ? eventsResult.data.slice(0, 6) : [];
 
   return (
@@ -323,8 +326,8 @@ const HomePage = async () => {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {topHosts.length > 0 ? (
-              topHosts.map((host: any) => (
+            {topHostsLimited.length > 0 ? (
+              topHostsLimited.map((host: any) => (
                 <Card key={host.id} className="text-center">
                   <CardHeader>
                     <div className="mx-auto mb-4 h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
@@ -426,27 +429,6 @@ const HomePage = async () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      {/* <section className="py-20 px-4 bg-primary text-primary-foreground">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-4xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Join thousands of people discovering and creating amazing events every day.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/register">
-              <Button size="lg" variant="secondary" className="text-lg px-8">
-                Sign Up Now
-              </Button>
-            </Link>
-            <Link href="/explore-events">
-              <Button size="lg" variant="outline" className="text-lg px-8 bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
-                Explore Events
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section> */}
     </main>
   );
 };
