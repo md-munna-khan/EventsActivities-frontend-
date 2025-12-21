@@ -52,7 +52,7 @@ const PublicNavbar = () => {
         setRole("PUBLIC");
       } else {
         const result = await verifyAccessToken(token);
-        console.log(result)
+      
         if (result.success && result.payload && result.payload.role) {
           const r = String(result.payload.role).toUpperCase();
           setRole(["CLIENT", "HOST", "ADMIN"].includes(r) ? r : "PUBLIC");

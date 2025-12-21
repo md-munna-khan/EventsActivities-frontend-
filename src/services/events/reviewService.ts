@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { serverFetch } from "@/lib/server-fetch";
@@ -91,33 +92,5 @@ export async function getEventReviews(eventId: string) {
   }
 }
 
-// export async function getAllEventReviews() {
-//   try {
-//     const response = await serverFetch.get (`/review/all-reviews`, {
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
 
-//     const result = await response.json();
-
-//     if (!response.ok) {
-//       return {
-//         success: false,
-//         data: [],
-//         message: result.message || "Failed to fetch reviews",
-//       };
-//     }
-
-//     return result;
-//   } catch (error: unknown) {
-//     const message = error instanceof Error ? error.message : "Failed to fetch reviews";
-//     console.error("Error fetching reviews:", error);
-//     return {
-//       success: false,
-//       data: [],
-//       message: message,
-//     };
-//   }
-// }
 

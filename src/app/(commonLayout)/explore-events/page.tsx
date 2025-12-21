@@ -31,7 +31,7 @@ const ExploreEventsPage = async ({ searchParams }: ExploreEventsPageProps) => {
     const events = result.success && result.data ? result.data : [];
     const meta = result.meta || { page: 1, limit: 10, total: 0, pages: 0 };
 
-    // Debug logging
+
     console.log("ExploreEventsPage - Events count:", events.length);
     console.log("ExploreEventsPage - Meta:", meta);
 

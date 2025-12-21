@@ -47,7 +47,7 @@ export async function updateMyProfile(formData: FormData) {
         if (file && file instanceof File && file.size > 0) {
             uploadFormData.append('file', file);
         }
-console.log(uploadFormData)
+
         const response = await serverFetch.patch(`/user/update-my-profile`, {
             body: uploadFormData,
         });
